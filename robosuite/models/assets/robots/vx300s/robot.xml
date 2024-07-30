@@ -110,6 +110,7 @@
     <exclude body1="right_arm_mount" body2="right/shoulder_link"/>
   </contact>
 
+ <!-- Why don't these servo ctrl ranges match the dynamixel torque values..? -->
  <actuator>
     <motor ctrllimited="true" ctrlrange="-5 5"  class="waist" name="right/waist" joint="right/waist"/>
     <motor ctrllimited="true" ctrlrange="-50 50"  class="shoulder" name="right/shoulder" joint="right/shoulder"/>

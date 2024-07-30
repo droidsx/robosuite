@@ -1,0 +1,62 @@
+<mujoco model="px100">
+  <compiler angle="radian"/>
+  <asset>
+    <mesh name="base" file="base.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="shoulder" file="shoulder.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="upper_arm" file="upper_arm.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="forearm" file="forearm.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="gripper" file="gripper.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="gripper_prop" file="gripper_prop.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="gripper_bar" file="gripper_bar.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="gripper_finger" file="gripper_finger.stl" scale="0.001 0.001 0.001"/>
+  </asset>
+  <worldbody>
+    <geom quat="0.707107 0 0 0.707107" type="mesh" mesh="base"/>
+    <body name="px100/shoulder_link" pos="0 0 0.05085">
+      <inertial pos="1.11169e-05 -0.000360564 0.0284598" quat="0.70707 -0.00720478 -0.00587214 0.707083" mass="0.072587" diaginertia="2.535e-05 2.3103e-05 1.4417e-05"/>
+      <joint name="waist" pos="0 0 0" axis="0 0 1" limited="true" range="-3.14158 3.14158" damping="0.1" frictionloss="0.1"/>
+      <geom pos="0 0 -0.0022" quat="0.707107 0 0 0.707107" type="mesh" mesh="shoulder"/>
+      <body name="px100/upper_arm_link" pos="0 0 0.04225">
+        <inertial pos="0.0161977 -0.000292935 0.087723" quat="0.652596 0.116128 -0.1365 0.736207" mass="0.082923" diaginertia="8.08442e-05 8.00509e-05 3.06049e-05"/>
+        <joint name="shoulder" pos="0 0 0" axis="0 1 0" limited="true" range="-1.93732 1.8675" damping="0.1" frictionloss="0.1"/>
+        <geom quat="0.707107 0 0 0.707107" type="mesh" mesh="upper_arm"/>
+        <body name="px100/forearm_link" pos="0.035 0 0.1">
+          <inertial pos="0.077372 -0.000332488 0" quat="0.50208 0.497911 -0.50208 0.497911" mass="0.073058" diaginertia="6.035e-05 5.33826e-05 1.65274e-05"/>
+          <joint name="elbow" pos="0 0 0" axis="0 1 0" limited="true" range="-2.11185 1.6057" damping="0.1" frictionloss="0.1"/>
+          <geom quat="0.707107 0 0 0.707107" type="mesh" mesh="forearm"/>
+          <body name="px100/gripper_link" pos="0.1 0 0">
+            <inertial pos="0.0548278 1.80687e-07 0.00899549" quat="0.549842 0.418331 0.621956 0.36857" mass="0.107128" diaginertia="0.00307286 0.00307133 0.00303066"/>
+            <joint name="wrist_angle" pos="0 0 0" axis="0 1 0" limited="true" range="-1.74533 2.14675" damping="0.1" frictionloss="0.1"/>
+            <geom quat="0.707107 0 0 0.707107" type="mesh" mesh="gripper"/>
+            <geom quat="0.707107 0 0 0.707107" type="mesh" mesh="gripper_bar"/>
+            <body name="px100/gripper_prop_link" pos="0.0685 0 0">
+              <inertial pos="0.000846 -1.933e-06 4.2e-05" quat="0.654786 -0.266277 -0.265707 0.655555" mass="0.00434" diaginertia="1.1156e-06 9.02926e-07 2.63673e-07"/>
+              <joint name="gripper" pos="0 0 0" axis="1 0 0" limited="false" damping="0.1" frictionloss="0.1"/>
+              <geom pos="-0.0685 0 0" quat="0.707107 0 0 0.707107" type="mesh" mesh="gripper_prop"/>
+            </body>
+            <body name="px100/left_finger_link" pos="0.086 0 0">
+              <inertial pos="0.013816 0 0" quat="0.705384 0.705384 -0.0493271 -0.0493271" mass="0.016246" diaginertia="4.79509e-06 3.7467e-06 1.48651e-06"/>
+              <joint name="left_finger" pos="0 0 0" axis="0 1 0" type="slide" limited="true" range="0.015 0.037" damping="0.1" frictionloss="0.1"/>
+              <geom pos="0 0.005 0" quat="0 0 0 -1" type="mesh" mesh="gripper_finger"/>
+            </body>
+            <body name="px100/right_finger_link" pos="0.086 0 0">
+              <inertial pos="0.013816 0 0" quat="0.705384 0.705384 0.0493271 0.0493271" mass="0.016246" diaginertia="4.79509e-06 3.7467e-06 1.48651e-06"/>
+              <joint name="right_finger" pos="0 0 0" axis="0 1 0" type="slide" limited="true" range="-0.037 -0.015" damping="0.1" frictionloss="0.1"/>
+              <geom pos="0 -0.005 0" quat="0 0 1 0" type="mesh" mesh="gripper_finger"/>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <!-- All the servos in the pincher use XL430-W250 -->
+  <!-- Unsure how to set control range and model the motors right now, doing a relative step down based on joint position -->
+  <actuator>
+    <motor ctrllimited="true" joint="waist" name="waist_motor" ctrlrange="-50.0 50.0" />
+    <motor ctrllimited="true" joint="shoulder" name="shoulder_motor" ctrlrange="-10.0 10.0"/>
+    <motor ctrllimited="true" joint="elbow" name="elbow_motor" ctrlrange="-5.0 5.0" />
+    <motor ctrllimited="true" joint="wrist_angle" name="wrist_motor" ctrlrange="-2.0 2.0" />
+    <motor ctrllimited="true" joint="left_finger" name="left_finger_motor" ctrlrange="-1.0 1.0" />
+    <motor ctrllimited="true" joint="right_finger" name="right_finger_motor" ctrlrange="-1.0 1.0" />
+  </actuator>
+</mujoco>

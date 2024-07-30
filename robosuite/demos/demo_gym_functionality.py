@@ -1,3 +1,4 @@
+# TODO: Stale and not needed -- delete
 """
 This script shows how to adapt an environment to be compatible
 with the Gymnasium API. This is useful when using
